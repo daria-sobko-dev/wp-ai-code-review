@@ -1,0 +1,24 @@
+{
+  "name": "wp-ai-code-review",
+  "version": "1.0.0",
+  "description": "GitHub Action that reviews WordPress pull requests with Claude: security, escaping, nonces, SQL, WordPress coding standards. Comments go on the exact lines.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "wp-ai-review": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": ["github-action", "code-review", "wordpress", "claude", "ai", "security"],
+  "author": "Daria Sobko",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  }
+}

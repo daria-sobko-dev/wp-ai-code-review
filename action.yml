@@ -1,0 +1,75 @@
+name: "WordPress AI Code Review"
+description: "Reviews WordPress pull requests with Claude: security, escaping, nonces, SQL and WordPress APIs. Comments on the exact lines."
+author: "Daria Sobko"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  anthropic_api_key:
+    description: "Anthropic API key. Store it as a repository secret."
+    required: true
+  github_token:
+    description: "Token used to read the pull request and post the review."
+    required: false
+    default: ${{ github.token }}
+  model:
+    description: "Claude model ID."
+    required: false
+    default: "claude-sonnet-5-5"
+  min_severity:
+    description: "Lowest severity to report: critical, high, medium or low."
+    required: false
+    default: "low"
+  fail_on:
+    description: "Fail the check when a finding is this severe or worse: critical, high, medium, low or none."
+    required: false
+    default: "none"
+  include:
+    description: "Files to review (comma or newline separated globs)."
+    required: false
+    default: "**/*.php, **/*.js, **/*.jsx, **/*.ts, **/*.tsx, **/*.mjs"
+  exclude:
+    description: "Files to skip."
+    required: false
+    default: "vendor/**, node_modules/**, dist/**, build/**, **/*.min.js, **/*.asset.php"
+  max_files:
+    description: "Maximum number of files to review."
+    required: false
+    default: "30"
+  max_diff_chars:
+    description: "Maximum diff size sent to Claude, in characters."
+    required: false
+    default: "80000"
+  max_comments:
+    description: "Maximum inline comments. The rest go to the review summary."
+    required: false
+    default: "20"
+  rules_file:
+    description: "Optional file in the repository with project rules for the reviewer."
+    required: false
+    default: ".github/ai-review.md"
+  review_drafts:
+    description: "Review draft pull requests too."
+    required: false
+    default: "false"
+  fail_on_error:
+    description: "Fail the check when the Anthropic API is unavailable. By default the review is skipped with a warning."
+    required: false
+    default: "false"
+  anthropic_base_url:
+    description: "Custom API base URL (for a proxy or gateway)."
+    required: false
+    default: ""
+
+outputs:
+  findings:
+    description: "Number of findings."
+  inline_comments:
+    description: "Number of inline comments posted."
+  highest_severity:
+    description: "Most severe finding: critical, high, medium, low or none."
+
+runs:
+  using: "node24"
+  main: "dist/action.js"

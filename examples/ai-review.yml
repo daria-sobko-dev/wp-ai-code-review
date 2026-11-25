@@ -1,0 +1,24 @@
+# Copy to .github/workflows/ai-review.yml in your repository.
+name: AI code review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# A new push cancels the review that is still running for the same pull request.
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: YOUR-USERNAME/wp-ai-code-review@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # fail_on: high   # uncomment to block merging on high or critical findings
